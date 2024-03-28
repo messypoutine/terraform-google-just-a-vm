@@ -1,0 +1,4 @@
+{
+  "name": "terraform-google-some-vm (aka poodle)",
+  "description": "demonstrate the capabilities of terraform with complex modules"
+}
