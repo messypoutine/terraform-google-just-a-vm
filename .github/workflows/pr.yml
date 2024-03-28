@@ -11,13 +11,13 @@ jobs:
       pr_can_be_processed: ${{ steps.condition_checks.outputs.pr_can_be_processed }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Check if interesting files have changed
         id: file_check
-        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
             const changedFiles = await github.rest.pulls.listFiles({
@@ -25,7 +25,7 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.issue.number
             });
-            const interestingFiles = ['README.md'];
+            const interestingFiles = ['ABOUT.md'];
             const paths = changedFiles.data.map(file => file.filename);
             const hasInterestingChanges = paths.some(path => interestingFiles.includes(path));
             core.setOutput("has_interesting_changes", hasInterestingChanges);
@@ -33,11 +33,7 @@ jobs:
       - name: Check all conditions
         id: condition_checks
         run: |
-          echo "pr_can_be_processed=${{ 
-            (github.repository_owner == 'messypoutine') &&
-            (github.event.pull_request.draft == false) && 
-            (steps.file_check.outputs.has_interesting_changes == 'true')
-          }}" >> $GITHUB_OUTPUT
+          echo "pr_can_be_processed=${{ (github.repository_owner == 'messypoutine') && (github.event.pull_request.draft == false) && (steps.file_check.outputs.has_interesting_changes == 'true') }}" >> $GITHUB_OUTPUT
 
   process-pr:
     needs: validate-pr-conditions
@@ -56,4 +52,4 @@ jobs:
               github.actor == 'torvalds' || 
               github.actor == 'dependabot[bot]'
           }}
-        uses: messypoutine/actionable/.github/actions/auto-format@0ec48225f5a4eb5baabe493c167d8e9097a01772 # v1
+        uses: messypoutine/actionable/.github/actions/auto-format@3d9642c96a7d5f93c55d12f406a74b19f0c7d4c6 # v1.0.0
