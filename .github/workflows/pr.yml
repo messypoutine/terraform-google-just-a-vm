@@ -33,11 +33,7 @@ jobs:
       - name: Check all conditions
         id: condition_checks
         run: |
-          echo "pr_can_be_processed=${{ 
-            (github.repository_owner == 'messypoutine') &&
-            (github.event.pull_request.draft == false) && 
-            (steps.file_check.outputs.has_interesting_changes == 'true')
-          }}" >> $GITHUB_OUTPUT
+          echo "pr_can_be_processed=${{ (github.repository_owner == 'messypoutine') && (github.event.pull_request.draft == false) && (steps.file_check.outputs.has_interesting_changes == 'true') }}" >> $GITHUB_OUTPUT
 
   process-pr:
     needs: validate-pr-conditions
