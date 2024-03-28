@@ -41,6 +41,7 @@ jobs:
 
   process-pr:
     needs: validate-pr-conditions
+    if: needs.validate-pr-conditions.outputs.pr_can_be_processed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Slack Notification
@@ -52,7 +53,7 @@ jobs:
       - name: Auto-format markdown files
         if: |
           ${{ 
-              (needs.validate-pr-conditions.outputs.pr_can_be_processed == 'true') &&
-              (github.actor == 'torvalds' || github.actor == 'dependabot[bot]') 
+              github.actor == 'torvalds' || 
+              github.actor == 'dependabot[bot]'
           }}
         uses: messypoutine/actionable/.github/actions/auto-format@0ec48225f5a4eb5baabe493c167d8e9097a01772 # v1
