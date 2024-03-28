@@ -4,8 +4,8 @@ This project is called terraform-google-some-vm (aka poodle). It is used to demo
 
 ## Source
 
-This is sourced from the repository messypoutine/johndoe
+This is sourced from the repository messypoutine/terraform-google-some-vm
 
 ## Contributors
 
-The core maintainer is johndoe  ...
+The core maintainer is fproulx-boostsecurity
