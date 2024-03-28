@@ -1,0 +1,13 @@
+name: Pull Requests
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Show welcome message
+      uses: messypoutine/actionable/.github/actions/welcome-contribution@0ec48225f5a4eb5baabe493c167d8e9097a01772 # v1
+    - name: Auto-format markdown files
+      uses: messypoutine/actionable/.github/actions/auto-format@0ec48225f5a4eb5baabe493c167d8e9097a01772 # v1
