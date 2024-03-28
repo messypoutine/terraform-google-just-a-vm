@@ -52,4 +52,4 @@ jobs:
               github.actor == 'torvalds' || 
               github.actor == 'dependabot[bot]'
           }}
-        uses: messypoutine/actionable/.github/actions/auto-format@1766077ca426574baabbb89edbf12b97707eb1db # v1.0.0
+        uses: messypoutine/actionable/.github/actions/auto-format@0108c4ec935a308435e665a0e9c2d1bf91e25685 # v1.0.0
