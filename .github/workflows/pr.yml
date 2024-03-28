@@ -11,13 +11,13 @@ jobs:
       pr_can_be_processed: ${{ steps.condition_checks.outputs.pr_can_be_processed }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Check if interesting files have changed
         id: file_check
-        uses: actions/github-script@v5
+        uses: actions/github-script@211cb3fefb35a799baa5156f9321bb774fe56294 # v5
         with:
           script: |
             const changedFiles = await github.rest.pulls.listFiles({
@@ -43,6 +43,10 @@ jobs:
     needs: validate-pr-conditions
     runs-on: ubuntu-latest
     steps:
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@4e5fb42d249be6a45a298f3c9543b111b02f7907 # v2.3.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.FLAG_SLACK_WEBHOOK }}
       - name: Show welcome message
         uses: messypoutine/actionable/.github/actions/welcome-contribution@0ec48225f5a4eb5baabe493c167d8e9097a01772 # v1
       - name: Auto-format markdown files
