@@ -1,13 +1,54 @@
-name: Pull Requests
+name: Conditionally process PR
+
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
 
 jobs:
-  process:
+  validate-pr-conditions:
+    runs-on: ubuntu-latest
+    outputs:
+      pr_can_be_processed: ${{ steps.condition_checks.outputs.pr_can_be_processed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Check if interesting files have changed
+        id: file_check
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const changedFiles = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            const interestingFiles = ['README.md'];
+            const paths = changedFiles.data.map(file => file.filename);
+            const hasInterestingChanges = paths.some(path => interestingFiles.includes(path));
+            core.setOutput("has_interesting_changes", hasInterestingChanges);
+
+      - name: Check all conditions
+        id: condition_checks
+        run: |
+          echo "pr_can_be_processed=${{ 
+            (github.repository_owner == 'messypoutine') &&
+            (github.event.pull_request.draft == false) && 
+            (steps.file_check.outputs.has_interesting_changes == 'true')
+          }}" >> $GITHUB_OUTPUT
+
+  process-pr:
+    needs: validate-pr-conditions
     runs-on: ubuntu-latest
     steps:
-    - name: Show welcome message
-      uses: messypoutine/actionable/.github/actions/welcome-contribution@0ec48225f5a4eb5baabe493c167d8e9097a01772 # v1
-    - name: Auto-format markdown files
-      uses: messypoutine/actionable/.github/actions/auto-format@0ec48225f5a4eb5baabe493c167d8e9097a01772 # v1
+      - name: Show welcome message
+        uses: messypoutine/actionable/.github/actions/welcome-contribution@0ec48225f5a4eb5baabe493c167d8e9097a01772 # v1
+      - name: Auto-format markdown files
+        if: |
+          ${{ 
+              (needs.validate-pr-conditions.outputs.pr_can_be_processed == 'true') &&
+              (github.actor == 'torvalds' || github.actor == 'dependabot[bot]') 
+          }}
+        uses: messypoutine/actionable/.github/actions/auto-format@0ec48225f5a4eb5baabe493c167d8e9097a01772 # v1
